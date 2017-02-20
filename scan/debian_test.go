@@ -187,7 +187,7 @@ util-linux (2.26.2-6) unstable; urgency=medium`,
 
 	d := newDebian(config.ServerInfo{})
 	for _, tt := range tests {
-		actual := d.getCveIDFromChangelog(tt.in[2], tt.in[0], tt.in[1])
+		actual := d.getCveIDsFromChangelog(tt.in[2], tt.in[0], tt.in[1])
 		if len(actual) != len(tt.expected) {
 			t.Errorf("Len of return array are'nt same. expected %#v, actual %#v", tt.expected, actual)
 			t.Errorf(pp.Sprintf("%s", tt.in))

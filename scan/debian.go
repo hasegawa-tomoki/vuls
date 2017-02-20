@@ -434,7 +434,7 @@ func (o *debian) scanVulnInfos(upgradablePacks []models.PackageInfo, meta *cache
 				func(p models.PackageInfo) {
 					changelog := o.getChangelogCache(meta, p)
 					if 0 < len(changelog) {
-						cveIDs := o.getCveIDFromChangelog(changelog, p.Name, p.Version)
+						cveIDs := o.getCveIDsFromChangelog(changelog, p.Name, p.Version)
 						resChan <- struct {
 							models.PackageInfo
 							strarray
@@ -555,10 +555,10 @@ func (o *debian) scanPackageCveIDs(pack models.PackageInfo) ([]string, error) {
 		}
 	}
 	// No error will be returned. Only logging.
-	return o.getCveIDFromChangelog(r.Stdout, pack.Name, pack.Version), nil
+	return o.getCveIDsFromChangelog(r.Stdout, pack.Name, pack.Version), nil
 }
 
-func (o *debian) getCveIDFromChangelog(changelog string,
+func (o *debian) getCveIDsFromChangelog(changelog string,
 	packName string, versionOrLater string) []string {
 
 	if cveIDs, err := o.parseChangelog(changelog, packName, versionOrLater); err == nil {
