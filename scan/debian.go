@@ -592,20 +592,20 @@ func (o *debian) parseChangelog(changelog string,
 	cveRe := regexp.MustCompile(`(CVE-\d{4}-\d{4,})`)
 	stopRe := regexp.MustCompile(fmt.Sprintf(`\(%s\)`, regexp.QuoteMeta(versionOrLater)))
 	stopLineFound := false
-	leniantStopLineFound := false
-	versionOrLaterLeniant := versionOrLater
-	if i := strings.IndexRune(versionOrLaterLeniant, '+'); i >= 0 {
-		versionOrLaterLeniant = versionOrLaterLeniant[:i]
+	lenientStopLineFound := false
+	versionOrLaterlenient := versionOrLater
+	if i := strings.IndexRune(versionOrLaterlenient, '+'); i >= 0 {
+		versionOrLaterlenient = versionOrLaterlenient[:i]
 	}
-	leniantRe := regexp.MustCompile(fmt.Sprintf(`\(%s\)`, regexp.QuoteMeta(versionOrLaterLeniant)))
+	lenientRe := regexp.MustCompile(fmt.Sprintf(`\(%s\)`, regexp.QuoteMeta(versionOrLaterlenient)))
 	lines := strings.Split(changelog, "\n")
 	for _, line := range lines {
-		if matche := stopRe.MatchString(line); matche {
+		if match := stopRe.MatchString(line); match {
 			//  o.log.Debugf("Found the stop line: %s", line)
 			stopLineFound = true
 			break
-		} else if matchel := leniantRe.MatchString(line); matchel {
-			leniantStopLineFound = true
+		} else if matchl := lenientRe.MatchString(line); matchl {
+			lenientStopLineFound = true
 			break
 		} else if matches := cveRe.FindAllString(line, -1); 0 < len(matches) {
 			for _, m := range matches {
@@ -613,7 +613,7 @@ func (o *debian) parseChangelog(changelog string,
 			}
 		}
 	}
-	if !stopLineFound && !leniantStopLineFound {
+	if !stopLineFound && !lenientStopLineFound {
 		return []string{}, fmt.Errorf(
 			"Failed to scan CVE IDs. The version is not in changelog. name: %s, version: %s",
 			packName,
